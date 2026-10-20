@@ -20,6 +20,8 @@ mobile/dist/
 mobile/web-build/
 
 # Local configuration, secrets, and editor files
+build.sh
+backend/requirements-prod.txt
 .env
 .env.*
 !.env.example

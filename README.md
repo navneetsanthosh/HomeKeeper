@@ -58,23 +58,3 @@ For automatic daily checks on Windows, create a daily task in Task Scheduler. Se
 
 Bill image OCR suggests fields for review before saving. Warranty email checks run through a Django management command; Windows Task Scheduler can run it daily. Real email delivery requires SMTP configuration. For deployment, configure a production secret key, HTTPS, secure cookies, allowed hosts, validated uploads, and private media storage. The included local media serving is for development only.
 
-## Production deployment (Render)
-
-The deployment setup serves the Vite web app and Django API from the same HTTPS origin, uses Render Postgres, and saves receipt/photo uploads on a persistent disk. Uploaded files are delivered through an authenticated API endpoint. The `render.yaml` Blueprint creates these resources after you connect this project to Render.
-
-### Before deploying
-
-1. In the current local app, go to **Profile → Export HomeKeeper data** and save the ZIP somewhere safe. The database and uploads on this computer are excluded from Git.
-2. Push this project to GitHub. The mobile app folder is excluded from this repository. The root `.gitignore` also excludes the local SQLite database, uploaded bills/photos, and Python/Node dependencies.
-3. Connect that repository on Render with **New → Blueprint** and select `render.yaml`. Review the billable web service, Postgres, and media disk in Render before selecting **Deploy Blueprint**.
-4. Once the service is live, create your account on the hosted site and restore your ZIP from **Profile → Import from backup ZIP**. This replaces the hosted account's current data with the backup. The account itself must be created on the hosted site; the ZIP restores inventory and attachments, not login credentials.
-
-Render's free Postgres expires after 30 days, and free web services cannot use persistent disks. This project stores uploaded receipts/photos on a disk, so its Blueprint uses paid durable resources. It also includes a daily cron job for warranty emails. Based on the current [Render pricing](https://render.com/pricing), budget about $15.25/month for the starter web service, smallest paid Postgres plan, 1 GB media disk, and cron job minimum, before bandwidth, larger storage, taxes, or other usage. Confirm the actual estimate in Render before deploying. The cron runs at 02:00 UTC; configure SMTP environment variables on the cron service in Render for actual email delivery.
-
-### Local web/API address
-
-Local development remains unchanged: start Django on port 8000 and use `npm run dev` in `frontend`. The production web build uses `/api` on the same origin.
-
-
-
-
